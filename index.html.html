@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournoi EPS - Elimination Directe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>Tournoi EPS - Elimination Directe</h1>
+      <p>Badminton, tennis de table, tennis, padel...</p>
+    </div>
+    <div class="header-actions">
+      <button id="epsModeBtn" class="btn btn-secondary" type="button">Mode EPS</button>
+      <button id="fullscreenBtn" class="btn btn-secondary" type="button">Plein ecran</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Parametres du tournoi</h2>
+      <div class="form-grid">
+        <label>
+          Nom du tournoi
+          <input id="tournamentName" type="text" placeholder="Ex: Challenge 4e B">
+        </label>
+        <label>
+          Sport
+          <select id="sportType">
+            <option>Badminton</option>
+            <option>Tennis de table</option>
+            <option>Tennis</option>
+            <option>Padel</option>
+            <option>Autre</option>
+          </select>
+        </label>
+        <label>
+          Nombre de participants (3-32)
+          <input id="participantCount" type="number" min="3" max="32" value="8">
+        </label>
+        <label>
+          Taille du tableau (pairs 8 a 32)
+          <select id="bracketSizeSelect">
+            <option value="3">Tableau de 3 (mini)</option>
+            <option value="8">Tableau de 8</option>
+            <option value="10">Tableau de 10</option>
+            <option value="12">Tableau de 12</option>
+            <option value="14">Tableau de 14</option>
+            <option value="16">Tableau de 16</option>
+            <option value="18">Tableau de 18</option>
+            <option value="20">Tableau de 20</option>
+            <option value="22">Tableau de 22</option>
+            <option value="24">Tableau de 24</option>
+            <option value="26">Tableau de 26</option>
+            <option value="28">Tableau de 28</option>
+            <option value="30">Tableau de 30</option>
+            <option value="32">Tableau de 32</option>
+          </select>
+        </label>
+        <label>
+          Qualifies finale (principal + consolante)
+          <select id="finalQualifiers">
+            <option value="2">2 + 2</option>
+            <option value="3">3 + 3</option>
+          </select>
+        </label>
+        <label>
+          Format du tournoi
+          <select id="tournamentMode">
+            <option value="single">Sans rattrapage</option>
+            <option value="double">Avec rattrapage</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Joueurs (ordre = tete de serie)</h2>
+      <p class="hint">Collez une liste de noms (1 ligne = 1 joueur), puis cliquez sur "Generer automatiquement".</p>
+      <textarea id="bulkPlayers" rows="8" placeholder="Alice&#10;Benoit&#10;Chloe&#10;..."></textarea>
+      <div class="row">
+        <button id="addPlayerFieldBtn" class="btn btn-secondary" type="button">Ajouter un champ</button>
+        <button id="loadExampleBtn" class="btn btn-secondary" type="button">Exemple pre-rempli</button>
+      </div>
+      <div id="playersContainer" class="players-list"></div>
+      <div class="row">
+        <button id="generateBtn" class="btn btn-primary" type="button">Generer automatiquement</button>
+        <button id="resetBtn" class="btn btn-danger" type="button">Nouveau tournoi</button>
+        <button id="clearAllBtn" class="btn btn-danger" type="button">Vider toutes les donnees</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Options d'equite et outils</h2>
+      <ul class="check-list">
+        <li>BYE auto sur seeds manquantes (priorite aux meilleures tetes de serie)</li>
+        <li>Placement officiel des seeds (equilibre haut/bas)</li>
+        <li>Propagation automatique des vainqueurs</li>
+        <li>Validation anti-egalite des scores</li>
+      </ul>
+      <div class="row wrap">
+        <button id="exportPngBtn" class="btn btn-secondary" type="button">Export PNG</button>
+        <button id="exportPdfBtn" class="btn btn-secondary" type="button">Export PDF</button>
+        <button id="printBtn" class="btn btn-secondary" type="button">Imprimer</button>
+      </div>
+      <div class="timer-box">
+        <h3>Chronometre EPS</h3>
+        <div id="timerDisplay">00:00</div>
+        <div class="row">
+          <button id="timerStartPauseBtn" class="btn btn-secondary" type="button">Start / Pause</button>
+          <button id="timerResetBtn" class="btn btn-secondary" type="button">Reset</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="panel bracket-panel">
+    <div class="bracket-headline">
+      <h2 id="bracketTitle">Tableau de 8</h2>
+      <p id="statusText">Configurez les joueurs puis generez le tournoi.</p>
+    </div>
+    <div class="tabs">
+      <button id="tabMainBtn" class="tab-btn active" type="button">Tournoi principal</button>
+      <button id="tabConsolanteBtn" class="tab-btn" type="button">Tournoi secondaire (1 defaite)</button>
+      <button id="tabClassementBtn" class="tab-btn" type="button">Tournoi rattrapage</button>
+      <button id="tabFinalBtn" class="tab-btn" type="button">Phase finale</button>
+      <button id="tabRankingBtn" class="tab-btn" type="button">Classement RG</button>
+    </div>
+    <div id="bracketWrapper" class="bracket-wrapper"></div>
+    <div id="consolationWrapper" class="bracket-wrapper"></div>
+    <div id="classementWrapper" class="bracket-wrapper"></div>
+    <div id="finalBracketWrapper" class="bracket-wrapper"></div>
+    <div id="rankingWrapper" class="bracket-wrapper"></div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
